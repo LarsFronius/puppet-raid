@@ -8,4 +8,5 @@ description 'UNKNOWN'
 project_page 'UNKNOWN'
 
 ## Add dependencies, if any:
-dependency 'puppetlabs/apt', '>= 0.0.4'
+dependency 'puppetlabs/apt'
+dependency 'puppetlabs/stdlib'
