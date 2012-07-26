@@ -7,7 +7,7 @@ class raid::repo {
             }
         }
         default: {
-            fail( "Unsupported OS family: ${::operatingsystem}" )
+            notify { "Unsupported OS family: ${::operatingsystem}": }
         }
     }
 }

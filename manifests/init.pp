@@ -15,6 +15,7 @@ class raid {
     anchor {'raid::start': }->
     class {'raid::repo': }~>
     class {'raid::package': }~>
+    class {'raid::service': }~>
     class {'raid::nagios': }~>
     anchor {'raid::end': }
 

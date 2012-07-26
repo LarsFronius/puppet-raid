@@ -3,8 +3,11 @@ class raid::package {
         /^LSI/: {
             class { 'raid::package::lsi': }
         }
+        undef: {
+            notify { "No RAID Controller found": }
+        }
         default: {
-            fail( "Unsupported RAID Controller: ${::raid_bus_controller_0_device}" )
+            notify { "Unsupported RAID Controller: ${::raid_bus_controller_0_device}": }
         }
     }
 }

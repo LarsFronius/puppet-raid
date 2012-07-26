@@ -1,0 +1,3 @@
+class raid::nagios {
+
+}
