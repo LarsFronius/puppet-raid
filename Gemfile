@@ -1,4 +1,5 @@
 source :rubygems
 gem 'puppetlabs_spec_helper'
 
-gem 'puppet', "= 2.7.14"
+puppetversion = ENV.key?('PUPPET_VERSION') ? "= #{ENV['PUPPET_VERSION']}" : ['= 2.7.14']
+gem 'puppet', puppetversion
