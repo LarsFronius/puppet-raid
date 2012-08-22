@@ -4,4 +4,10 @@ class raid::repo::debian {
     release     => $::lsbdistcodename,
     repos       => 'main',
   }
+
+  #FIXME the repo sucks a bit http://hwraid.le-vert.net/ticket/12
+  apt::conf { 'unauthenticated':
+    priority => '99',
+    content  => 'APT::Get::AllowUnauthenticated yes;'
+  }
 }
