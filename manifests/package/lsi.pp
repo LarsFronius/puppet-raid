@@ -1,0 +1,3 @@
+class raid::package::lsi {
+
+}
