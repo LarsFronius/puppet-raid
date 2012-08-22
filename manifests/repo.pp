@@ -1,10 +1,7 @@
 class raid::repo {
     case $::operatingsystem {
         'Debian': {
-            class { 'raid::repo::debian':
-                require => Anchor['raid::repo::alpha'],
-                before  => Anchor['raid::repo::omega'],
-            }
+            include 'raid::repo::debian'
         }
         default: {
             notify { "Unsupported OS family: ${::operatingsystem}": }
