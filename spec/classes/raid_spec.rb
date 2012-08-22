@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-# Note, rspec-puppet determines the class name from the top level describe
-# string.
 describe 'raid' do
   describe "on RedHat" do
     let(:facts) do
@@ -19,24 +17,10 @@ describe 'raid' do
   describe "on Debian" do
 
     let(:facts) do
-      { :operatingsystem => 'Debian' }
-    end
-    let :pre_condition do
-      " define apt::source (
-          $location          = '',
-          $release           = $lsbdistcodename,
-          $repos             = 'main',
-          $include_src       = true,
-          $required_packages = false,
-          $key               = false,
-          $key_server        = 'keyserver.ubuntu.com',
-          $key_content       = false,
-          $key_source        = false,
-          $pin               = false
-        ) {
-          notify { 'mock apt::source $title':; }
-        }
-      "
+      {
+        :operatingsystem => 'Debian',
+        :lsbdistcodename => 'squeeze'
+      }
     end
 
     it { should contain_class 'raid' }
@@ -45,6 +29,7 @@ describe 'raid' do
     it { should contain_class 'raid::service' }
     it { should contain_class 'raid::nagios' }
     it { should contain_class 'raid::repo::debian' }
+    it { should contain_apt__source 'raid' }
 
     describe "No RAID Controller" do
         let(:facts) do
@@ -53,6 +38,20 @@ describe 'raid' do
             { :raid_bus_controller_0_vendor => nil }
         end
         it { should contain_notify 'No RAID Controller found' }
+    end
+
+    describe "With LSI Logic / Symbios Logic - LSI MegaSAS 9260 - megaraid_sas" do
+
+      let(:facts) do
+        {
+          :raid_bus_controller_0_vendor => "LSI Logic / Symbios Logic",
+          :raid_bus_controller_0_device => "LSI MegaSAS 9260",
+          :raid_bus_controller_0_driver => "megaraid_sas"
+        }
+      end
+
+      it { should contain_class 'raid::package::lsi' }
+      it { should_not contain_notify 'No RAID Controller found' }
     end
 
   end
