@@ -3,6 +3,5 @@ class raid::repo::debian {
     location    => 'http://hwraid.le-vert.net/debian',
     release     => $::lsbdistcodename,
     repos       => 'main',
-    include_src => true,
   }
 }

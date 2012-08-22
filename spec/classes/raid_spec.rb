@@ -52,6 +52,9 @@ describe 'raid' do
 
       it { should contain_class 'raid::package::lsi' }
       it { should_not contain_notify 'No RAID Controller found' }
+      it { should contain_package 'megaclisas-status' }
+      it { should contain_package 'megacli' }
+      it { should contain_file('/usr/sbin/check-raid').with_target('/usr/sbin/megaclisas-status') }
     end
 
   end
