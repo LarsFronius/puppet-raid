@@ -28,19 +28,19 @@ class raid (
     if $service {
       class {'raid::service':
         require => Class['raid::package'],
-        notify  => Anchor['raid::start']
+        notify  => Anchor['raid::end']
       }
     }
 
     if $nagioscheck {
       class {'raid::nagios':
         require => Class['raid::package'],
-        notify  => Anchor['raid::start']
+        notify  => Anchor['raid::end']
       }
     }
 
-    anchor {'raid::start': }->
-    class {'raid::repo': }->
+    anchor {'raid::start': }~>
+    class {'raid::repo': }~>
     anchor {'raid::end': }
 
 }
