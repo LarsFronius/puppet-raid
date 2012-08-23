@@ -14,7 +14,7 @@ describe 'raid::service' do
 
   describe 'with raid_service set to false' do
     let (:params) {
-      { 
+      {
         :service => 'foobar',
         :raid_service => false
       }
@@ -24,20 +24,35 @@ describe 'raid::service' do
       :enable => false )
     }
   end
-      
-     
-  describe "With Mail Checking set up" do
+
+  describe "With Mail Checking set up to send mails to dummy" do
 
     let(:params) {
       {
         :raid_service => "true",
-        :raid_mailto => "mommy",
+        :raid_mailto  => "dummy",
+      }
+    }
+
+    it { should contain_augeas('set_default_mailto').with_changes('set MAILTO dummy') }
+    it { should_not contain_augeas('set_default_period') }
+    it { should_not contain_augeas('set_default_remind') }
+
+  end
+
+  describe "With Mail Checking set up to send mails to dummy with specific period and remind" do
+    let(:params) {
+      {
+        :raid_service => "true",
+        :raid_mailto => "dummy",
         :raid_period => "123",
         :raid_remind => "456"
       }
     }
 
-    it { should contain_augeas('set_defaults').with_changes(['set MAILTO mommy', 'set PERIOD 123', 'set REMIND 456']) }
+    it { should contain_augeas('set_default_mailto').with_changes('set MAILTO dummy') }
+    it { should contain_augeas('set_default_period').with_changes('set PERIOD 123')  }
+    it { should contain_augeas('set_default_remind').with_changes('set REMIND 456')  }
 
   end
 

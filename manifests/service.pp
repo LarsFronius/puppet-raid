@@ -17,21 +17,6 @@ class raid::service (
       }
     }
 
-    $real_raid_mailto = $raid_mailto ? {
-          undef   => undef,
-          default => "set MAILTO ${raid_mailto}"
-    }
-
-    $real_raid_period = $raid_period ? {
-          undef   => undef,
-          default => "set PERIOD ${raid_period}"
-    }
-
-    $real_raid_remind = $raid_remind ? {
-          undef   => undef,
-          default => "set REMIND ${raid_remind}"
-    }
-
     service { $service:
         ensure => $raid_service_ensure,
         enable => $raid_service_enable
@@ -41,10 +26,27 @@ class raid::service (
       ensure => present
     }
 
-    augeas { 'set_defaults':
-      context => "/files/etc/default/${service}",
-      changes => [ $real_raid_mailto, $real_raid_period, $real_raid_remind ],
-      require => File["/etc/default/${service}"]
+    if $raid_mailto {
+        augeas { 'set_default_mailto':
+          context => "/files/etc/default/${service}",
+          changes => "set MAILTO ${raid_mailto}",
+          require => File["/etc/default/${service}"]
+        }
     }
 
+    if $raid_period {
+        augeas { 'set_default_period':
+          context => "/files/etc/default/${service}",
+          changes => "set PERIOD ${raid_period}",
+          require => File["/etc/default/${service}"]
+        }
+    }
+
+    if $raid_remind {
+        augeas { 'set_default_remind':
+          context => "/files/etc/default/${service}",
+          changes => "set REMIND ${raid_remind}",
+          require => File["/etc/default/${service}"]
+        }
+    }
 }
