@@ -14,17 +14,17 @@ class raid::service (
     }
 
     $raid_mailto = $::raid_mailto ? {
-          undef => undef,
+          undef   => undef,
           default => "set MAILTO ${::raid_mailto}"
     }
 
     $raid_period = $::raid_period ? {
-          undef => undef,
+          undef   => undef,
           default => "set PERIOD ${::raid_period}"
     }
 
     $raid_remind = $::raid_remind ? {
-          undef => undef,
+          undef   => undef,
           default => "set REMIND ${::raid_remind}"
     }
 
@@ -33,14 +33,14 @@ class raid::service (
         enable => $raid_service_enable
     }
 
-    file { '/etc/default/${service}':
+    file { "/etc/default/${service}":
       ensure => present
     }
 
     augeas { 'set_defaults':
       context => "/files/etc/default/${service}",
       changes => [ $raid_mailto, $raid_period, $raid_remind ],
-      require => File['/etc/default/${service}']
+      require => File["/etc/default/${service}"]
     }
 
 }
