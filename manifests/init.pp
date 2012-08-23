@@ -21,7 +21,7 @@ class raid (
     if $packages {
       class {'raid::package':
         require => Class['raid::repo'],
-        notify  => Anchor['raid::start']
+        notify  => Anchor['raid::end']
       }
     }
 
