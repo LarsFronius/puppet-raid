@@ -6,4 +6,9 @@ class raid::nagios (
         ensure => link,
         target => $nagioscheck
     }
+
+    @@nagios_command { 'check_raid':
+        command_line => '/usr/sbin/check-raid --nagios',
+        require      => File['/usr/sbin/check-raid']
+    }
 }
