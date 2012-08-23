@@ -11,12 +11,36 @@
 # Sample Usage:
 #
 # [Remember: No empty lines between comments and class definition]
-class raid {
+class raid (
+    $packages = $raid::params::packages,
+    $service = $raid::params::service,
+    $nagioscheck = $raid::params::nagioscheck
+    ) inherits raid::params
+{
+
+    if $packages {
+      class {'raid::package':
+        require => Class['raid::repo'],
+        notify  => Anchor['raid::start']
+      }
+    }
+
+    if $service {
+      class {'raid::service':
+        require => Class['raid::package'],
+        notify  => Anchor['raid::start']
+      }
+    }
+
+    if $nagioscheck {
+      class {'raid::nagios':
+        require => Class['raid::package'],
+        notify  => Anchor['raid::start']
+      }
+    }
+
     anchor {'raid::start': }->
-    class {'raid::repo': }~>
-    class {'raid::package': }~>
-    class {'raid::service': }~>
-    class {'raid::nagios': }~>
+    class {'raid::repo': }->
     anchor {'raid::end': }
 
 }

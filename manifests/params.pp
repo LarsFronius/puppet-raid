@@ -14,11 +14,11 @@ class raid::params {
         }
       }
     }
-    undef: {
-      notify { 'No RAID Controller found': }
-    }
     default: {
       notify { "Unsupported RAID Vendor: ${::raid_bus_controller_0_vendor}": }
+    }
+    undef: {
+      notify { 'No RAID Controller found': }
     }
   }
 }
