@@ -32,11 +32,6 @@ describe 'raid' do
     it { should contain_apt__source 'raid' }
 
     describe "No RAID Controller" do
-        let(:facts) do
-            { :raid_bus_controller_0_driver => nil }
-            { :raid_bus_controller_0_device => nil }
-            { :raid_bus_controller_0_vendor => nil }
-        end
         it { should contain_notify 'No RAID Controller found' }
     end
 
@@ -50,7 +45,6 @@ describe 'raid' do
         }
       end
 
-      it { should contain_class 'raid::package::lsi' }
       it { should_not contain_notify 'No RAID Controller found' }
       it { should contain_package 'megaclisas-status' }
       it { should contain_package 'megacli' }
