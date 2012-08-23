@@ -18,8 +18,10 @@ class raid::service (
     }
 
     service { $service:
-        ensure => $raid_service_ensure,
-        enable => $raid_service_enable
+        ensure     => $raid_service_ensure,
+        enable     => $raid_service_enable,
+        hasstatus  => false,
+        hasrestart => true
     }
 
     file { "/etc/default/${service}":
