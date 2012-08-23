@@ -58,5 +58,25 @@ describe 'raid' do
 
     end
 
+    describe "With LSI Logic / Symbios Logic - SAS2008 PCI-Express Fusion-MPT SAS-2 [Falcon] - mpt2sas" do
+
+      let(:facts) do
+        {
+          :serial_attached_scsi_controller_0_device => "SAS2008 PCI-Express Fusion-MPT SAS-2 [Falcon]",
+          :serial_attached_scsi_controller_0_driver => "mpt2sas",
+          :serial_attached_scsi_controller_0_vendor => "LSI Logic / Symbios Logic"
+        }
+      end
+
+      it { should_not contain_notify 'No RAID Controller found' }
+      it { should contain_package 'sas2ircu-status' }
+      it { should contain_package 'sas2ircu' }
+      it { should contain_class 'raid::package' }
+      it { should contain_class 'raid::service' }
+      it { should contain_class 'raid::nagios' }
+      it { should contain_file('/usr/sbin/check-raid').with_target('/usr/sbin/sas2ircu-status') }
+
+    end
+
   end
 end
