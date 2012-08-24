@@ -2,7 +2,7 @@ if Facter.value(:kernel) == "Linux"
   devices = {}
   slot=""
   lspci=Facter::Util::Resolution.exec('lspci -v -mm -k')
-  if not lspci.empty?
+  if not lspci.nil?
     lspci.each_line do |line|
       if not line =~ /^$/ # We don't need to parse empty lines
         splitted = line.split(/\t/)
