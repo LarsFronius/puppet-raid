@@ -29,12 +29,15 @@ if Facter.value(:kernel) == "Linux"
     end
     dev_classes.each do |dev_class|
       dev_class_count = 0
+      devices_in_class = {}
       devices.each_key do |devidentifier|
         case devices[devidentifier].fetch("Class")
         when dev_class
           ["Vendor","Device","Driver"].each do |a|
             if devices[devidentifier].has_key?(a)
-              Facter.add(:"#{devices[devidentifier].fetch("Class").downcase.gsub(' ','_')}_#{dev_class_count}_#{a.downcase}") do
+              dev_name = "#{devices[devidentifier].fetch("Class").downcase.gsub(' ','_')}_#{dev_class_count}"
+              devices_in_class[dev_name] = 1
+              Facter.add(:"#{dev_name}_#{a.downcase}") do
                 setcode do
                     devices[devidentifier].fetch(a)
                 end
@@ -42,6 +45,11 @@ if Facter.value(:kernel) == "Linux"
             end
           end
           dev_class_count += 1
+        end
+      end
+      Facter.add(:"#{dev_class.downcase.gsub(' ','_')}s") do
+        setcode do
+          devices_in_class.keys.sort.join(',')
         end
       end
     end
